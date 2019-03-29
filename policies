@@ -1,0 +1,13 @@
+package http.authz
+
+allow {
+    input.method == "GET"
+    input.path == "/fetch"
+    input.user == "sai"
+}
+
+allow {
+    input.method == "POST"
+    input.path == "/update"
+    input.user == "admin"
+}
