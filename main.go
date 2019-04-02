@@ -8,7 +8,6 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
-	"strings"
 	"time"
 
 	"github.com/open-policy-agent/opa/plugins"
@@ -70,6 +69,10 @@ func main() {
 		w.WriteHeader(http.StatusNoContent)
 		w.Write([]byte("OK"))
 	}))
+	http.HandleFunc("/securefetch", opaMiddleware(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusNoContent)
+		w.Write([]byte("OK"))
+	}))
 	http.ListenAndServe(":8080", nil)
 }
 
@@ -105,18 +108,18 @@ func createPolicies() error {
 func opaMiddleware(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 
-		user := r.URL.Query().Get("user")
-		if user = strings.TrimSpace(user); user == "" {
-			w.WriteHeader(http.StatusBadRequest)
-			w.Write([]byte(`{"message": "missing required query param user"}`))
-			return
-		}
+		var (
+			user = r.URL.Query().Get("user")
+			jot  = r.Header.Get("Authorization")
+		)
 
 		payload := map[string]interface{}{
-			"input": map[string]string{
+			"input": map[string]interface{}{
 				"method": r.Method,
 				"path":   r.URL.Path,
 				"user":   user,
+				"jot":    jot,
+				"secret": "DC8FFE78365CB8A71A1BC547F95D7",
 			},
 		}
 

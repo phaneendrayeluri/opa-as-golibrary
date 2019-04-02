@@ -11,3 +11,8 @@ allow {
     input.path == "/update"
     input.user == "admin"
 }
+
+allow = io.jwt.verify_hs256(input.jot, input.secret) {
+    input.method == "GET"
+    input.path == "/securefetch"
+}

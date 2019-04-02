@@ -17,3 +17,9 @@ The application has two api endpoints
 `curl -X POST 'http://localhost:8080/update?user=sai'` <- 401 UnAuthorized
 
 `curl -X POST 'http://localhost:8080/update?user=admin'` <- 204 NoContent
+
+See Code for JWT Secret.
+
+`curl -X GET http://localhost:8080/securefetch -H 'Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.qu4gwDwamwngenVxcpE1--OR7bbzayTuk3BlNilBJgE'` <- 204 
+
+`curl -X GET http://localhost:8080/securefetch -H 'Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6I.qu4gwDwamwngenVxcpE1--OR7bbzayTuk3BlNilBJgE'` <- 401 
